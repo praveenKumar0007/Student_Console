@@ -1,4 +1,5 @@
 import mysql.connector
+import marks
 myConn = mysql.connector.connect(host = "localhost",user = "root",passwd = "almightypunch",database = "pythondb")
 while True:
     person_choice = input("1.Student\n2.Faculty\n3.Exit\n")
@@ -28,11 +29,11 @@ while True:
                 Name=input("Enter the name\n")  
                 Roll_no=input("Enter the Roll_no\n")
                 print("Enter the marks")
-                English=int(input("English "))
-                Tamil=int(input("Tamil "))
-                Maths=int(input("Maths "))
-                Science=int(input("Science "))
-                Social=int(input("Social science "))
+                English=marks.get_marks("English")
+                Tamil=marks.get_marks("Tamil")
+                Maths=marks.get_marks("Maths")
+                Science=marks.get_marks("Science")
+                Social=marks.get_marks("Social science")
                 inpTuple=(Name,Roll_no,English,Tamil,Maths,Science,Social)
                 cursor=myConn.cursor()
                 cursor.execute("Insert into student values(%s,%s,%s,%s,%s,%s,%s)",inpTuple)
@@ -134,7 +135,7 @@ while True:
                 break
             else:
                   print("Invalid Choice")
-    elif person_choice == 3:
+    elif person_choice == '3':
         break
     else:
         print("Invalid Choice")
