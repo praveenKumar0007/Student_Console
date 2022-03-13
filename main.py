@@ -1,8 +1,8 @@
 import mysql.connector
-myConn = mysql.connector.connect(host="localhost",user="root",passwd="almightypunch",database="pythondb")
+myConn = mysql.connector.connect(host = "localhost",user = "root",passwd = "almightypunch",database = "pythondb")
 while True:
-    Decider_of_person_input=int(input("1.Student\n2.Faculty\n3.Exit\n"))
-    if Decider_of_person_input == 1:
+    person_choice = input("1.Student\n2.Faculty\n3.Exit\n")
+    if person_choice == '1':
         print("You can only view marks")
         Roll_no=input("Search by Roll_no\n")
         Count_Query="select count(roll_no) from student where roll_no=%s"
@@ -18,10 +18,10 @@ while True:
                     if j == 6:
                         print(i[j],end="\n")
                     else:
-                        print(i[j],end=" ")
+                        print(i[j],end= "  ")
         else:
-            print("Invalid Roll_no")
-    elif Decider_of_person_input == 2:
+            print("Invalid Roll Number\n")
+    elif person_choice == '2':
         while True:
             Decider_of_faculty_choice_input=int(input("\n1.Insert a Student details\n2.Display Student Details\n3.Search Details of a Student\n4.Delete Details of Student\n5.Update Student Details\n6.Exit\n"))
             if Decider_of_faculty_choice_input == 1:
@@ -133,8 +133,8 @@ while True:
             elif Decider_of_faculty_choice_input == 6:
                 break
             else:
-                print("Invalid Choice")
-    elif Decider_of_person_input == 3:
+                  print("Invalid Choice")
+    elif person_choice == 3:
         break
     else:
         print("Invalid Choice")
