@@ -1,0 +1,1 @@
+item_list = ["Roll Number : ", "Name : ", "English Marks :", "Tamil Marks : ", "Maths Marks : ", "Science Marks : ", "Social Science Marks : "]

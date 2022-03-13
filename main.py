@@ -1,58 +1,65 @@
 import mysql.connector
 from valid_input import get_valid_input
 from marks import get_marks
+from desc import item_list
 myConn = mysql.connector.connect(host = "localhost",user = "root",passwd = "almightypunch",database = "pythondb")
 while True:
     person_choice = get_valid_input("1.Student\n2.Faculty\n3.Exit\n")
     if person_choice == 1:
         print("You can only view marks")
-        roll_no=input("Search by Roll_no\n")
-        Count_Query="select count(roll_no) from student where roll_no=%s"
-        cursor2=myConn.cursor()
+        roll_no = input("Search by Roll_no\n")
+        Count_Query = "select count(Roll_no) from student where Roll_no=%s"
+        cursor2 = myConn.cursor()
         cursor2.execute(Count_Query,(roll_no,))
-        res=cursor2.fetchone()
+        res = cursor2.fetchone()
         if res[0] > 0:
-            select_Query="select * from student where roll_no=%s"
+            select_Query = "select * from student where Roll_no=%s"
             cursor2.execute(select_Query,(roll_no,))
-            sturesult=cursor2.fetchall()
+            sturesult = cursor2.fetchall()
             for i in sturesult:
                 for j in range(0,7):
-                    if j == 6:
-                        print(i[j],end="\n")
-                    else:
-                        print(i[j],end= "  ")
+                    print(item_list[j],i[j],end="\n")
+            print("\n")
         else:
             print("Invalid Roll Number\n")
     elif person_choice == 2:
         while True:
             Decider_of_faculty_choice_input=get_valid_input("\n1.Insert a Student details\n2.Display Student Details\n3.Search Details of a Student\n4.Delete Details of Student\n5.Update Student Details\n6.Exit\n")
             if Decider_of_faculty_choice_input == 1:
-                name = input("Enter the name\n")  
-                roll_no = input("Enter the Roll_no\n")
-                english = get_marks("English")
-                tamil = get_marks("Tamil")
-                maths = get_marks("Maths")
-                science = get_marks("Science")
-                social_science = get_marks("Social Science")
-                inpTuple=(name,roll_no,english,tamil,maths,science,social_science)
-                cursor=myConn.cursor()
-                cursor.execute("Insert into student values(%s,%s,%s,%s,%s,%s,%s)",inpTuple)
-                myConn.commit()
+                roll_no = input("Enter Roll Number of Student :")
+                # To check if the entered roll number is already present in the database
+                Count_Query = "select count(Roll_no) from student where Roll_no=%s"
+                cursor2 = myConn.cursor()
+                cursor2.execute(Count_Query,(roll_no,))
+                res = cursor2.fetchone()
+                if( res[0] == 0):
+                    name = input("Enter the name of Student :")  
+                    english = get_marks("English")
+                    tamil = get_marks("Tamil")
+                    maths = get_marks("Maths")
+                    science = get_marks("Science")
+                    social_science = get_marks("Social Science")
+                    inpTuple=(roll_no,name,english,tamil,maths,science,social_science)
+                    cursor=myConn.cursor()
+                    cursor.execute("Insert into student values(%s,%s,%s,%s,%s,%s,%s)",inpTuple)
+                    myConn.commit()
+                else:
+                    print("Entered Roll Number is already present in the database...Please try again with valid Roll Number\n")
             elif Decider_of_faculty_choice_input == 2:
-                roll_no=input("Select by Roll_no\n")
-                Count_Query="select count(roll_no) from student where roll_no=%s"
+                Count_Query="select count(roll_no) from student"
                 cursor1=myConn.cursor()
-                cursor1.execute(Count_Query,(roll_no,))
+                cursor1.execute(Count_Query)
                 res=cursor1.fetchone()
                 if res[0] > 0:
-                    select_Query="select * from student where roll_no=%s"
-                    cursor1.execute(select_Query,(roll_no,))
+                    select_Query="select Roll_no, Name from student"
+                    cursor1.execute(select_Query)
                     result=cursor1.fetchall()
                     for i in result:
-                        for j in range(0,7):
-                            print(i[j],end=" ")
+                        for j in range(0,2):
+                            print(item_list[j],i[j],end=" | ")
+                        print("\n")
                 else:
-                    print("Invalid Roll_no")
+                    print("No Student Details are registered...Try inserting them into the database first")
             elif Decider_of_faculty_choice_input == 3:
                 roll_no=input("Select by Roll_no\n")
                 Count_Query="select count(roll_no) from student where roll_no=%s"
@@ -69,23 +76,23 @@ while True:
                 else:
                     print("Invalid Roll_no")
             elif Decider_of_faculty_choice_input == 4:
-                roll_no=input("Search by Roll_no\n")
-                Count_Query="select count(roll_no) from student where roll_no=%s"
+                roll_no = input("Enter the Roll Number that has to be deleted : ")
+                Count_Query = "select count(roll_no) from student where roll_no=%s"
                 cursor1=myConn.cursor()
-                cursor1.execute(Count_Query)
+                cursor1.execute(Count_Query,(roll_no,))
                 res=cursor1.fetchone()
                 if res[0] > 0:
-                    delete_Query="delete from student where roll_no=%s"
+                    delete_Query = "delete from student where roll_no=%s"
                     cursor1.execute(delete_Query,(roll_no,))
+                    print(f"Roll Number {roll_no} is deleted from the database")
                 else:
-                    print("Invalid Input")
+                    print("Entered Roll Number does NOT exist in the database")
             elif Decider_of_faculty_choice_input == 5:
-                cursor3=myConn.cursor()
-                roll_no=input("Enter the Roll_no you want to update\n")
-                print("Which part do you want to update")
-                Count_Query="select count(roll_no) from student where roll_no=%s"
+                cursor3 = myConn.cursor()
+                roll_no = input("Enter the Roll Number which you want to update\n")
+                Count_Query = "select count(roll_no) from student where roll_no=%s"
                 cursor3.execute(Count_Query,(roll_no,))
-                result=cursor3.fetchone()
+                result = cursor3.fetchone()
                 if result[0] > 0:
                     while True:
                         Decider_input_update=int(input("1.Name\n2.Roll_no\n3.English Mark\n4.Tamil mark\n5.Maths mark\n6.Science mark\n7.Social Science mark\n8.Exit from update\n"))
